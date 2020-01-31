@@ -2,6 +2,8 @@ package com.android.custombottomnavigationmenu
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -11,7 +13,9 @@ import com.android.custombottomnavigationmenu.fragment.HomeFragment
 import com.android.custombottomnavigationmenu.fragment.SearchFragment
 import com.android.custombottomnavigationmenu.fragment.SettingsFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
+
+
     lateinit var fragment_container: FrameLayout
     lateinit var bottomNavigation: LinearLayout
     lateinit var ivHome: ImageView
@@ -29,21 +33,28 @@ class MainActivity : AppCompatActivity() {
         ivPlus = findViewById(R.id.ivPlus)
         ivSearch = findViewById(R.id.ivSearch)
         ivSettings = findViewById(R.id.ivSettings)
+        ivHome.setOnClickListener(this)
+        ivAbout.setOnClickListener(this)
+        ivPlus.setOnClickListener(this)
+        ivSearch.setOnClickListener(this)
+        ivSettings.setOnClickListener(this)
 
         val homeFragment = HomeFragment()
         val manager = supportFragmentManager
         val transaction = manager.beginTransaction()
         transaction.add(R.id.fragment_container, homeFragment)
         transaction.commit()
+    }
 
-        ivHome.setOnClickListener {
+    override fun onClick(v: View?) {
+        if (v!!.equals(ivHome)) {
             val homeFragment = HomeFragment()
             val manager = supportFragmentManager
             val transaction = manager.beginTransaction()
             transaction.replace(R.id.fragment_container, homeFragment)
             transaction.commit()
         }
-        ivAbout.setOnClickListener {
+        else if (v!!.equals(ivAbout)) {
             val aboutFragment = AboutFragment()
             val manager = supportFragmentManager
             val transaction = manager.beginTransaction()
@@ -51,13 +62,10 @@ class MainActivity : AppCompatActivity() {
             transaction.addToBackStack(null)
             transaction.commit()
         }
-
-
-        ivPlus.setOnClickListener {
+        else if (v!!.equals(ivPlus)) {
             Toast.makeText(this, "Plus btn clicked", Toast.LENGTH_SHORT).show()
         }
-
-        ivSearch.setOnClickListener {
+        else if (v!!.equals(ivSearch)) {
             val searchFragment = SearchFragment()
             val manager = supportFragmentManager
             val transaction = manager.beginTransaction()
@@ -65,14 +73,16 @@ class MainActivity : AppCompatActivity() {
             transaction.addToBackStack(null)
             transaction.commit()
         }
-
-        ivSettings.setOnClickListener {
+        else if (v!!.equals(ivSettings)) {
             val settingsFragment = SettingsFragment()
             val manager = supportFragmentManager
             val transaction = manager.beginTransaction()
             transaction.replace(R.id.fragment_container, settingsFragment)
             transaction.addToBackStack(null)
             transaction.commit()
+        }
+        else {
+            Log.d("bottom navigation", "else part of bottom navigation")
         }
     }
 }
